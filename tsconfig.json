@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
+    "rootDir": "./src",
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -13,12 +14,15 @@
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
+    "ignoreDeprecations": "6.0",
     "experimentalDecorators": true,
     "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
-    "lib": ["ES2022", "dom"],
+    "lib": [
+      "ES2022", "dom"
+    ],
     "paths": {
       "@app/*": ["src/app/*"],
       "@environments/*": ["src/environments/*"]
