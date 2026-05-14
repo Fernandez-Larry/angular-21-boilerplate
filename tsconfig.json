@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "ignoreDeprecations": "5.0",
     "outDir": "./dist/out-tsc",
     "rootDir": "./src",
     "allowSyntheticDefaultImports": true,
@@ -14,7 +15,6 @@
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
-    "ignoreDeprecations": "6.0",
     "experimentalDecorators": true,
     "moduleResolution": "bundler",
     "importHelpers": true,

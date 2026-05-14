@@ -21,5 +21,3 @@ export function MustMatch(controlName: string, matchingControlName: string) {
         return null;
     };
 }
-
-export default MustMatch;
