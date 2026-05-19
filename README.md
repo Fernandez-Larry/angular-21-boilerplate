@@ -1,3 +1,11 @@
+# Angular 21 Auth Boilerplate - Frontend
+
+## Live Application
+🔗 https://angular-21-boilerplate-drab.vercel.app
+
+## Backend API
+🔗 https://node-mysql-api-production-fbdd.up.railway.app
+
 # Angular 21 Auth Boilerplate (Beginner Guide)
 
 This project is a beginner-friendly Angular 21 boilerplate that demonstrates a complete authentication flow:
