@@ -1,6 +1,6 @@
 {
     "buildCommand": "ng build --configuration production",
-    "outputDirectory": "dist/angular-15-example/browser",
+    "outputDirectory": "dist/angular-15-example",
     "framework": "angular",
     "rewrites": [
         {
