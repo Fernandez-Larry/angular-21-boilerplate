@@ -6,6 +6,9 @@ import { delay, materialize, dematerialize } from 'rxjs/operators';
 import { AlertService } from '@app/_services';
 import { Role } from '@app/_models';
 
+// Toggle to completely disable the fake backend behavior (prevents fake email previews)
+const ENABLE_FAKE_BACKEND = false;
+
 // array in local storage for accounts
 const accountsKey = 'angular-15-signup-verification-boilerplate-accounts';
 let accounts: any[] = JSON.parse(localStorage.getItem(accountsKey)!) || [];
@@ -17,6 +20,11 @@ export class FakeBackendInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const { url, method, headers, body } = request;
         const alertService = this.alertService;
+
+        // If fake backend is globally disabled, pass through immediately
+        if (!ENABLE_FAKE_BACKEND) {
+            return next.handle(request);
+        }
 
         return handleRoute();
 
