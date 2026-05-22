@@ -37,11 +37,17 @@ export class ResetPasswordComponent implements OnInit {
             validator: MustMatch('password', 'confirmPassword')
         });
 
-        const token = this.route.snapshot.queryParams['token'];
+        const token = this.route.snapshot.queryParamMap.get('token');
+
+        if (!token) {
+            this.tokenStatus = TokenStatus.Invalid;
+            return;
+        }
 
         // remove token from url to prevent http referer leakage
         this.router.navigate([], { relativeTo: this.route, replaceUrl: true });
 
+        console.log('Validating reset token from URL query param:', token);
         this.accountService.validateResetToken(token)
             .pipe(first())
             .subscribe({
