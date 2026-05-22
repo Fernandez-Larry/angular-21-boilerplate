@@ -53,13 +53,11 @@ export class ResetPasswordComponent implements OnInit {
                     console.log('validateResetToken success response:', response);
                     this.token = token;
                     this.tokenStatus = 'valid';
-                    console.log('reset-password status set to valid; form visible:', this.tokenStatus === 'valid');
                     this.cdr.detectChanges();
                 },
                 error: (error) => {
                     console.error('validateResetToken error:', error);
                     this.tokenStatus = 'invalid';
-                    console.log('reset-password status set to invalid');
                     this.cdr.detectChanges();
                 }
             });
