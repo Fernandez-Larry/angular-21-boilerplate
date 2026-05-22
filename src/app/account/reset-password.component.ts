@@ -40,6 +40,7 @@ export class ResetPasswordComponent implements OnInit {
         const token = this.route.snapshot.queryParamMap.get('token');
 
         if (!token) {
+            console.log('No reset token found in URL.');
             this.tokenStatus = TokenStatus.Invalid;
             return;
         }
@@ -51,11 +52,13 @@ export class ResetPasswordComponent implements OnInit {
         this.accountService.validateResetToken(token)
             .pipe(first())
             .subscribe({
-                next: () => {
+                next: (response) => {
+                    console.log('validateResetToken success response:', response);
                     this.token = token;
                     this.tokenStatus = TokenStatus.Valid;
                 },
-                error: () => {
+                error: (error) => {
+                    console.error('validateResetToken error:', error);
                     this.tokenStatus = TokenStatus.Invalid;
                 }
             });

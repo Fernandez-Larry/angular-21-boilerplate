@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, map, finalize, tap } from 'rxjs';
+import { BehaviorSubject, Observable, map, finalize } from 'rxjs';
 
 import { environment } from '@environments/environment';
 import { Account } from '@app/_models';
@@ -65,15 +65,13 @@ export class AccountService {
     validateResetToken(token: string) {
         const payload = { token };
         console.log('validateResetToken request body:', payload);
-        return this.http.post(`${baseUrl}/validate-reset-token`, payload)
-            .pipe(tap(response => console.log('validateResetToken response:', response)));
+        return this.http.post<any>(`${baseUrl}/validate-reset-token`, payload);
     }
 
     resetPassword(token: string, password: string, confirmPassword: string) {
         const payload = { token, password, confirmPassword };
         console.log('resetPassword request body:', payload);
-        return this.http.post(`${baseUrl}/reset-password`, payload)
-            .pipe(tap(response => console.log('resetPassword response:', response)));
+        return this.http.post<any>(`${baseUrl}/reset-password`, payload);
     }
 
     getAll() {
