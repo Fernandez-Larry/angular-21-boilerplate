@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs';
@@ -6,16 +6,9 @@ import { first } from 'rxjs';
 import { AccountService, AlertService } from '@app/_services';
 import { MustMatch } from '@app/_helpers';
 
-enum TokenStatus {
-    Validating,
-    Valid,
-    Invalid
-}
-
 @Component({ templateUrl: 'reset-password.component.html', standalone: false })
 export class ResetPasswordComponent implements OnInit {
-    TokenStatus = TokenStatus;
-    tokenStatus = TokenStatus.Validating;
+    tokenStatus: 'validating' | 'valid' | 'invalid' = 'validating';
     token?: string;
     form!: FormGroup;
     loading = false;
@@ -26,7 +19,8 @@ export class ResetPasswordComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private accountService: AccountService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private cdr: ChangeDetectorRef
     ) { }
 
     ngOnInit() {
@@ -47,7 +41,7 @@ export class ResetPasswordComponent implements OnInit {
 
         if (!token) {
             console.log('No reset token found in URL.');
-            this.tokenStatus = TokenStatus.Invalid;
+            this.tokenStatus = 'invalid';
             return;
         }
 
@@ -58,11 +52,15 @@ export class ResetPasswordComponent implements OnInit {
                 next: (response) => {
                     console.log('validateResetToken success response:', response);
                     this.token = token;
-                    this.tokenStatus = TokenStatus.Valid;
+                    this.tokenStatus = 'valid';
+                    console.log('reset-password status set to valid; form visible:', this.tokenStatus === 'valid');
+                    this.cdr.detectChanges();
                 },
                 error: (error) => {
                     console.error('validateResetToken error:', error);
-                    this.tokenStatus = TokenStatus.Invalid;
+                    this.tokenStatus = 'invalid';
+                    console.log('reset-password status set to invalid');
+                    this.cdr.detectChanges();
                 }
             });
     }
