@@ -45,9 +45,6 @@ export class ResetPasswordComponent implements OnInit {
             return;
         }
 
-        // remove token from url to prevent http referer leakage
-        this.router.navigate([], { relativeTo: this.route, replaceUrl: true });
-
         console.log('Validating reset token from URL query param:', token);
         this.accountService.validateResetToken(token)
             .pipe(first())
@@ -56,10 +53,16 @@ export class ResetPasswordComponent implements OnInit {
                     console.log('validateResetToken success response:', response);
                     this.token = token;
                     this.tokenStatus = TokenStatus.Valid;
+
+                    // remove token from url to prevent http referer leakage after validation completes
+                    this.router.navigate([], { relativeTo: this.route, replaceUrl: true });
                 },
                 error: (error) => {
                     console.error('validateResetToken error:', error);
                     this.tokenStatus = TokenStatus.Invalid;
+
+                    // also remove token from url on error to avoid leaking it
+                    this.router.navigate([], { relativeTo: this.route, replaceUrl: true });
                 }
             });
     }
