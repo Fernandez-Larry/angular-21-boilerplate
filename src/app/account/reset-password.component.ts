@@ -37,7 +37,13 @@ export class ResetPasswordComponent implements OnInit {
             validator: MustMatch('password', 'confirmPassword')
         });
 
-        const token = this.route.snapshot.queryParamMap.get('token');
+        const routeToken = this.route.snapshot.queryParamMap.get('token');
+        const browserToken = new URLSearchParams(window.location.search).get('token');
+        const token = routeToken || browserToken;
+
+        console.log('ResetPassword URL:', window.location.href);
+        console.log('ResetPassword route queryParams:', this.route.snapshot.queryParams);
+        console.log('ResetPassword routeToken:', routeToken, 'browserToken:', browserToken);
 
         if (!token) {
             console.log('No reset token found in URL.');
@@ -45,7 +51,7 @@ export class ResetPasswordComponent implements OnInit {
             return;
         }
 
-        console.log('Validating reset token from URL query param:', token);
+        console.log('Validating reset token:', token);
         this.accountService.validateResetToken(token)
             .pipe(first())
             .subscribe({
@@ -53,16 +59,10 @@ export class ResetPasswordComponent implements OnInit {
                     console.log('validateResetToken success response:', response);
                     this.token = token;
                     this.tokenStatus = TokenStatus.Valid;
-
-                    // remove token from url to prevent http referer leakage after validation completes
-                    this.router.navigate([], { relativeTo: this.route, replaceUrl: true });
                 },
                 error: (error) => {
                     console.error('validateResetToken error:', error);
                     this.tokenStatus = TokenStatus.Invalid;
-
-                    // also remove token from url on error to avoid leaking it
-                    this.router.navigate([], { relativeTo: this.route, replaceUrl: true });
                 }
             });
     }
@@ -78,6 +78,13 @@ export class ResetPasswordComponent implements OnInit {
 
         // stop here if form is invalid
         if (this.form.invalid) {
+            return;
+        }
+
+        // ensure token is present before submitting to avoid 400 from backend
+        if (!this.token) {
+            console.error('Attempted resetPassword submit without token');
+            this.alertService.error('Token is required');
             return;
         }
 
